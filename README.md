@@ -2,6 +2,12 @@
 
 Readmd is a small Windows Markdown viewer. It uses a Notepad-like window with tabs, opens each file in a new tab, renders Markdown read-only, and reads files with shared access so other programs can keep editing or replacing them.
 
+The app icon is a document-and-Markdown mark stored as `src\Readmd\Assets\Readmd.ico`, with `src\Readmd\Assets\ReadmdIcon.svg` kept as the editable source design. Regenerate the `.ico` after design changes with:
+
+```powershell
+.\scripts\Generate-ReadmdIcon.ps1
+```
+
 ## Build and Run
 
 ```powershell

@@ -6,6 +6,7 @@
         MinHeight="420"
         MinWidth="640"
         Width="1040"
+        Icon="Assets/Readmd.ico"
         Background="White">
     <Grid>
         <Grid.RowDefinitions>

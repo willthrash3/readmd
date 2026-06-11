@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Readmd application icon">
+  <defs>
+    <linearGradient id="background" x1="36" y1="28" x2="218" y2="228" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1C7ED6"/>
+      <stop offset="1" stop-color="#0B3D70"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#042240" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <rect x="12" y="12" width="232" height="232" rx="48" fill="url(#background)"/>
+  <path d="M70 42H160L194 76V210H70Z" fill="#FFFFFF" filter="url(#shadow)"/>
+  <path d="M160 42V76H194Z" fill="#DDE8F5"/>
+  <path d="M160 42V76H194" fill="none" stroke="#AFC5DA" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M70 42H160L194 76V210H70Z" fill="none" stroke="#D6E1EC" stroke-width="4" stroke-linejoin="round"/>
+
+  <path d="M90 158V110L106 134L122 110V158" fill="none" stroke="#102A43" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M150 108V154" fill="none" stroke="#102A43" stroke-width="13" stroke-linecap="round"/>
+  <path d="M132 143L150 162L168 143Z" fill="#102A43"/>
+  <path d="M92 182H172" stroke="#6BA4D9" stroke-width="9" stroke-linecap="round"/>
+  <path d="M92 198H152" stroke="#B7CEE4" stroke-width="8" stroke-linecap="round"/>
+</svg>
