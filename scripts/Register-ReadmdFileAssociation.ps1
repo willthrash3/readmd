@@ -1,3 +1,20 @@
+<#
+.SYNOPSIS
+Registers Readmd as a per-user Open With application for `.md` files.
+
+.DESCRIPTION
+Writes HKCU registry entries for the Readmd ProgID, application capabilities, supported file type, default icon, and open command. The script does not force the Windows UserChoice hash, so users still choose the final default app through Explorer or Windows Settings.
+
+.PARAMETER ExePath
+Path to the published `Readmd.exe` that Windows should launch for Markdown files.
+
+.EXAMPLE
+dotnet publish src\Readmd -c Release -o .\artifacts\Readmd
+.\scripts\Register-ReadmdFileAssociation.ps1 -ExePath .\artifacts\Readmd\Readmd.exe
+
+Publishes Readmd and registers the published executable for `.md` Open With entries.
+#>
+
 param(
     [Parameter(Mandatory = $true)]
     [string] $ExePath

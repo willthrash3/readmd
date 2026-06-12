@@ -1,3 +1,16 @@
+<#
+.SYNOPSIS
+Removes Readmd's per-user `.md` file association registration.
+
+.DESCRIPTION
+Deletes the HKCU registry entries created by `Register-ReadmdFileAssociation.ps1` and notifies the Windows shell that file association data changed. This does not remove the published application files.
+
+.EXAMPLE
+.\scripts\Unregister-ReadmdFileAssociation.ps1
+
+Removes Readmd from `.md` Open With registration for the current user.
+#>
+
 $progId = "Readmd.Markdown"
 $applicationName = "Readmd.exe"
 
