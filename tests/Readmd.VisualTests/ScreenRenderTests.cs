@@ -11,7 +11,7 @@ public sealed class ScreenRenderTests
     public async Task MainWindowRendersMarkdownOnScreen()
     {
         var root = FindRepositoryRoot();
-        var appPath = Path.Combine(root, "src", "Readmd", "bin", "Debug", "net8.0-windows", "Readmd.exe");
+        var appPath = Path.Combine(root, "src", "Readmd", "bin", "Debug", "net10.0-windows", "Readmd.exe");
         var fixturePath = Path.Combine(root, "tests", "fixtures", "visual.md");
         var outputDirectory = Path.Combine(root, "TestResults");
         Directory.CreateDirectory(outputDirectory);
@@ -33,6 +33,9 @@ public sealed class ScreenRenderTests
             var screenshotPath = Path.Combine(outputDirectory, "readmd-visual.png");
             using var bitmap = CaptureWindow(hwnd);
             bitmap.Save(screenshotPath, ImageFormat.Png);
+
+            var chromeLightPixels = CountLightPixelsInAppChrome(bitmap);
+            Assert.True(chromeLightPixels > 8_000, $"Expected the light Readmd app chrome to be visible. Found {chromeLightPixels} light pixels. Screenshot: {screenshotPath}");
 
             var contentDarkPixels = CountDarkPixelsBelowToolbar(bitmap);
             Assert.True(contentDarkPixels > 850, $"Expected rendered Markdown text below the toolbar. Found {contentDarkPixels} dark pixels. Screenshot: {screenshotPath}");
@@ -92,6 +95,24 @@ public sealed class ScreenRenderTests
         using var graphics = Graphics.FromImage(bitmap);
         graphics.CopyFromScreen(rect.Left, rect.Top, 0, 0, new Size(width, height), CopyPixelOperation.SourceCopy);
         return bitmap;
+    }
+
+    private static int CountLightPixelsInAppChrome(Bitmap bitmap)
+    {
+        var count = 0;
+        for (var y = 50; y < Math.Min(170, bitmap.Height); y += 2)
+        {
+            for (var x = 50; x < bitmap.Width - 30; x += 2)
+            {
+                var pixel = bitmap.GetPixel(x, y);
+                if (pixel.R > 220 && pixel.G > 225 && pixel.B > 225)
+                {
+                    count++;
+                }
+            }
+        }
+
+        return count;
     }
 
     private static int CountDarkPixelsBelowToolbar(Bitmap bitmap)

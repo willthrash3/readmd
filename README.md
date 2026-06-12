@@ -10,6 +10,8 @@ The app icon is a document-and-Markdown mark stored as `src\Readmd\Assets\Readmd
 
 ## Build and Run
 
+Requires the .NET 10 SDK.
+
 ```powershell
 dotnet build
 dotnet run --project src\Readmd -- .\README.md
