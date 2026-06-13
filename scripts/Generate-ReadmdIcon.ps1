@@ -1,3 +1,27 @@
+<#
+.SYNOPSIS
+Generates the Readmd Windows icon.
+
+.DESCRIPTION
+Creates a multi-size `.ico` file for the WPF application and, by default, writes a 256px PNG preview under `TestResults`.
+
+.PARAMETER OutIcon
+Destination path for the generated ICO file.
+
+.PARAMETER PreviewPng
+Optional destination path for the generated 256px preview PNG. Pass an empty string to skip the preview file.
+
+.EXAMPLE
+.\scripts\Generate-ReadmdIcon.ps1
+
+Regenerates `src\Readmd\Assets\Readmd.ico` and `TestResults\readmd-icon-256.png`.
+
+.EXAMPLE
+.\scripts\Generate-ReadmdIcon.ps1 -OutIcon .\artifacts\Readmd.ico -PreviewPng ""
+
+Writes only an ICO file to a custom path.
+#>
+
 param(
     [string] $OutIcon = "src\Readmd\Assets\Readmd.ico",
     [string] $PreviewPng = "TestResults\readmd-icon-256.png"

@@ -42,48 +42,68 @@ public sealed partial class MarkdownRenderer
               <style>
                 :root {
                   color-scheme: light;
-                  --border: #d0d7de;
-                  --muted: #57606a;
-                  --code-bg: #f6f8fa;
+                  --page: #f5f7fa;
+                  --surface: #ffffff;
+                  --text: #1f2933;
+                  --muted: #64717f;
+                  --border: #dce3ea;
+                  --border-strong: #c8d2dc;
+                  --accent: #2f7d67;
+                  --accent-soft: #e1f1ec;
+                  --link: #1f6f8b;
+                  --code-bg: #f3f5f7;
+                  --code-border: #dce5ec;
                 }
 
                 html, body {
                   margin: 0;
                   min-height: 100%;
-                  background: #ffffff;
-                  color: #1f2328;
+                  background: var(--page);
+                  color: var(--text);
                   font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
                   font-size: 15px;
-                  line-height: 1.55;
+                  line-height: 1.62;
                 }
 
                 main {
                   box-sizing: border-box;
-                  max-width: 1040px;
+                  max-width: 980px;
                   min-height: 100vh;
-                  padding: 28px 38px 56px;
+                  margin: 0 auto;
+                  padding: 44px 54px 72px;
+                  background: var(--surface);
+                  border-left: 1px solid #e8edf2;
+                  border-right: 1px solid #e8edf2;
                 }
 
                 h1, h2, h3, h4, h5, h6 {
-                  margin: 1.2em 0 0.55em;
+                  margin: 1.35em 0 0.55em;
                   line-height: 1.25;
                   font-weight: 600;
+                  letter-spacing: 0;
+                  color: #17212b;
+                }
+
+                h1:first-child,
+                h2:first-child,
+                h3:first-child {
+                  margin-top: 0;
                 }
 
                 h1 {
-                  padding-bottom: 0.3em;
-                  border-bottom: 1px solid var(--border);
-                  font-size: 2em;
+                  padding-bottom: 0.35em;
+                  border-bottom: 1px solid var(--border-strong);
+                  font-size: 2.15em;
                 }
 
                 h2 {
-                  padding-bottom: 0.25em;
+                  padding-bottom: 0.3em;
                   border-bottom: 1px solid var(--border);
-                  font-size: 1.45em;
+                  font-size: 1.5em;
                 }
 
                 h3 {
-                  font-size: 1.2em;
+                  font-size: 1.22em;
                 }
 
                 p, blockquote, ul, ol, table, pre {
@@ -91,44 +111,61 @@ public sealed partial class MarkdownRenderer
                   margin-bottom: 16px;
                 }
 
+                p {
+                  color: #283440;
+                }
+
                 a {
-                  color: #0969da;
+                  color: var(--link);
                   text-decoration: none;
+                  text-underline-offset: 0.18em;
                 }
 
                 a:hover {
                   text-decoration: underline;
                 }
 
+                ul, ol {
+                  padding-left: 1.6em;
+                }
+
+                li + li {
+                  margin-top: 0.25em;
+                }
+
                 blockquote {
                   margin-left: 0;
-                  padding: 0 1em;
+                  padding: 0.75em 1em;
                   color: var(--muted);
-                  border-left: 4px solid var(--border);
+                  background: #f7faf9;
+                  border-left: 4px solid var(--accent);
+                  border-radius: 0 6px 6px 0;
                 }
 
                 code, kbd, pre {
                   font-family: Consolas, "Cascadia Mono", "Courier New", monospace;
-                  font-size: 0.94em;
+                  font-size: 0.93em;
                 }
 
                 code {
                   padding: 0.15em 0.35em;
                   background: var(--code-bg);
+                  border: 1px solid var(--code-border);
                   border-radius: 4px;
                 }
 
                 pre {
                   overflow: auto;
-                  padding: 14px 16px;
+                  padding: 16px 18px;
                   background: var(--code-bg);
-                  border: 1px solid #eaeef2;
+                  border: 1px solid var(--code-border);
                   border-radius: 6px;
                 }
 
                 pre code {
                   padding: 0;
                   background: transparent;
+                  border: 0;
                   border-radius: 0;
                 }
 
@@ -137,28 +174,47 @@ public sealed partial class MarkdownRenderer
                   width: max-content;
                   max-width: 100%;
                   overflow: auto;
-                  border-collapse: collapse;
+                  border-collapse: separate;
+                  border-spacing: 0;
+                  border: 1px solid var(--border);
+                  border-radius: 6px;
                 }
 
                 th, td {
-                  padding: 6px 13px;
-                  border: 1px solid var(--border);
+                  padding: 8px 13px;
+                  border-right: 1px solid var(--border);
+                  border-bottom: 1px solid var(--border);
                 }
 
-                tr:nth-child(2n) {
-                  background: #f6f8fa;
+                th {
+                  background: #eef5f2;
+                  font-weight: 600;
+                }
+
+                td:last-child,
+                th:last-child {
+                  border-right: 0;
+                }
+
+                tr:last-child td {
+                  border-bottom: 0;
+                }
+
+                tr:nth-child(2n) td {
+                  background: #f7f9fb;
                 }
 
                 img {
                   max-width: 100%;
                   height: auto;
+                  border-radius: 6px;
                 }
 
                 hr {
-                  height: 0.25em;
+                  height: 1px;
                   padding: 0;
-                  margin: 24px 0;
-                  background: #d8dee4;
+                  margin: 28px 0;
+                  background: var(--border);
                   border: 0;
                 }
 
@@ -169,15 +225,28 @@ public sealed partial class MarkdownRenderer
                 .task-list-item input {
                   margin: 0 0.45em 0.25em -1.6em;
                   vertical-align: middle;
+                  accent-color: var(--accent);
                 }
 
                 .mermaid {
-                  margin: 18px 0;
-                  padding: 16px;
+                  margin: 20px 0;
+                  padding: 18px;
                   overflow: auto;
-                  background: #fbfbfb;
+                  background: #f7faf9;
                   border: 1px solid var(--border);
                   border-radius: 6px;
+                }
+
+                @media (max-width: 720px) {
+                  main {
+                    padding: 28px 24px 56px;
+                    border-left: 0;
+                    border-right: 0;
+                  }
+
+                  h1 {
+                    font-size: 1.75em;
+                  }
                 }
               </style>
             </head>

@@ -2,6 +2,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Shapes;
 using Microsoft.Web.WebView2.Wpf;
 using Microsoft.Win32;
 using Readmd.Documents;
@@ -90,19 +91,25 @@ public partial class MainWindow : Window
             Margin = new Thickness(0)
         };
 
-        var closeButton = new Button
+        var closeIcon = new Path
         {
-            Content = "x",
+            Data = Geometry.Parse("M5 5 L13 13 M13 5 L5 13"),
+            StrokeThickness = 1.8,
+            StrokeStartLineCap = PenLineCap.Round,
+            StrokeEndLineCap = PenLineCap.Round,
             Width = 18,
             Height = 18,
-            Margin = new Thickness(8, 0, 0, 0),
-            Padding = new Thickness(0),
-            BorderThickness = new Thickness(0),
-            Background = Brushes.Transparent,
+            Stretch = Stretch.None
+        };
+        closeIcon.SetResourceReference(Shape.StrokeProperty, "MutedText");
+
+        var closeButton = new Button
+        {
+            Content = closeIcon,
             ToolTip = "Close tab",
-            FontSize = 12,
             Focusable = false
         };
+        closeButton.SetResourceReference(FrameworkElement.StyleProperty, "TabCloseButtonStyle");
         closeButton.Click += CloseTabButton_Click;
         DockPanel.SetDock(closeButton, Dock.Right);
 
@@ -111,7 +118,8 @@ public partial class MainWindow : Window
             Text = title,
             MaxWidth = 260,
             VerticalAlignment = VerticalAlignment.Center,
-            TextTrimming = TextTrimming.CharacterEllipsis
+            TextTrimming = TextTrimming.CharacterEllipsis,
+            FontSize = 13
         };
 
         header.Children.Add(closeButton);
