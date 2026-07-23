@@ -27,6 +27,10 @@
         <SolidColorBrush x:Key="AccentBorder" Color="#B7D9CF" />
         <SolidColorBrush x:Key="CloseHoverBackground" Color="#E5EBF0" />
         <SolidColorBrush x:Key="ClosePressedBackground" Color="#D6E0E7" />
+        <!-- WPF renders submenu popups with the Windows light menu surface even
+             when the app is dark. Keep popup text on the matching system brush,
+             while top-level menu headers continue to use the app theme. -->
+        <SolidColorBrush x:Key="PopupMenuText" Color="#1F2933" />
 
         <Style x:Key="ToolbarButtonStyle" TargetType="{x:Type Button}">
             <Setter Property="Height" Value="34" />
@@ -116,6 +120,14 @@
         <Style TargetType="{x:Type MenuItem}">
             <Setter Property="Foreground" Value="{DynamicResource AppText}" />
             <Setter Property="Padding" Value="10,6" />
+            <Style.Triggers>
+                <Trigger Property="Role" Value="SubmenuHeader">
+                    <Setter Property="Foreground" Value="{DynamicResource PopupMenuText}" />
+                </Trigger>
+                <Trigger Property="Role" Value="SubmenuItem">
+                    <Setter Property="Foreground" Value="{DynamicResource PopupMenuText}" />
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
         <Style TargetType="{x:Type TabControl}">
