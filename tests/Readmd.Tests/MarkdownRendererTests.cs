@@ -72,6 +72,17 @@ public sealed class MarkdownRendererTests
     }
 
     [Fact]
+    public void RenderedDocumentFollowsTheSystemColorScheme()
+    {
+        var html = _renderer.RenderDocument("# Theme");
+
+        Assert.Contains("color-scheme: light dark", html);
+        Assert.Contains("@media (prefers-color-scheme: dark)", html);
+        Assert.Contains("""matchMedia("(prefers-color-scheme: dark)")""", html);
+        Assert.Contains("theme: darkMode ? \"dark\" : \"default\"", html);
+    }
+
+    [Fact]
     public void RendersAdvancedMarkdownExtensions()
     {
         var html = _renderer.RenderDocument("""
