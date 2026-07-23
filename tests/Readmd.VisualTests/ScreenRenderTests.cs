@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using Microsoft.Win32;
 
 namespace Readmd.VisualTests;
 
@@ -34,11 +35,16 @@ public sealed class ScreenRenderTests
             using var bitmap = CaptureWindow(hwnd);
             bitmap.Save(screenshotPath, ImageFormat.Png);
 
-            var chromeLightPixels = CountLightPixelsInAppChrome(bitmap);
-            Assert.True(chromeLightPixels > 8_000, $"Expected the light Readmd app chrome to be visible. Found {chromeLightPixels} light pixels. Screenshot: {screenshotPath}");
+            var darkMode = IsSystemDarkMode();
+            var chromeThemePixels = darkMode
+                ? CountDarkPixelsInAppChrome(bitmap)
+                : CountLightPixelsInAppChrome(bitmap);
+            Assert.True(chromeThemePixels > 8_000, $"Expected the {(darkMode ? "dark" : "light")} Readmd app chrome to be visible. Found {chromeThemePixels} matching pixels. Screenshot: {screenshotPath}");
 
-            var contentDarkPixels = CountDarkPixelsBelowToolbar(bitmap);
-            Assert.True(contentDarkPixels > 850, $"Expected rendered Markdown text below the toolbar. Found {contentDarkPixels} dark pixels. Screenshot: {screenshotPath}");
+            var contentTextPixels = darkMode
+                ? CountLightPixelsBelowToolbar(bitmap)
+                : CountDarkPixelsBelowToolbar(bitmap);
+            Assert.True(contentTextPixels > 850, $"Expected rendered Markdown text below the toolbar. Found {contentTextPixels} contrasting pixels. Screenshot: {screenshotPath}");
         }
         finally
         {
@@ -115,6 +121,24 @@ public sealed class ScreenRenderTests
         return count;
     }
 
+    private static int CountDarkPixelsInAppChrome(Bitmap bitmap)
+    {
+        var count = 0;
+        for (var y = 50; y < Math.Min(170, bitmap.Height); y += 2)
+        {
+            for (var x = 50; x < bitmap.Width - 30; x += 2)
+            {
+                var pixel = bitmap.GetPixel(x, y);
+                if (pixel.R < 80 && pixel.G < 80 && pixel.B < 80)
+                {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+
     private static int CountDarkPixelsBelowToolbar(Bitmap bitmap)
     {
         var count = 0;
@@ -131,6 +155,30 @@ public sealed class ScreenRenderTests
         }
 
         return count;
+    }
+
+    private static int CountLightPixelsBelowToolbar(Bitmap bitmap)
+    {
+        var count = 0;
+        for (var y = 120; y < bitmap.Height; y += 3)
+        {
+            for (var x = 30; x < bitmap.Width - 30; x += 3)
+            {
+                var pixel = bitmap.GetPixel(x, y);
+                if (pixel.R > 155 && pixel.G > 155 && pixel.B > 155)
+                {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    private static bool IsSystemDarkMode()
+    {
+        using var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize");
+        return key?.GetValue("AppsUseLightTheme") is int useLightTheme && useLightTheme == 0;
     }
 
     private static string FindRepositoryRoot()

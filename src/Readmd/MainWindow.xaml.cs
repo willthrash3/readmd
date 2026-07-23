@@ -6,7 +6,9 @@ using System.Windows.Shapes;
 using Microsoft.Web.WebView2.Wpf;
 using Microsoft.Win32;
 using Readmd.Documents;
+using Readmd.Infrastructure;
 using Readmd.Rendering;
+using System.ComponentModel;
 
 namespace Readmd;
 
@@ -18,10 +20,71 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        ApplySystemTheme();
+        SystemEvents.UserPreferenceChanged += SystemEvents_UserPreferenceChanged;
+        Closed += MainWindow_Closed;
         CommandBindings.Add(new CommandBinding(ApplicationCommands.Open, OpenCommand_Executed));
         InputBindings.Add(new KeyBinding(ApplicationCommands.Open, new KeyGesture(Key.O, ModifierKeys.Control)));
         InputBindings.Add(new KeyBinding(ApplicationCommands.Close, new KeyGesture(Key.W, ModifierKeys.Control)));
         CommandBindings.Add(new CommandBinding(ApplicationCommands.Close, CloseCommand_Executed, CloseCommand_CanExecute));
+    }
+
+    private void SystemEvents_UserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e)
+    {
+        if (e.Category is UserPreferenceCategory.General or UserPreferenceCategory.VisualStyle)
+        {
+            Dispatcher.Invoke(ApplySystemTheme);
+        }
+    }
+
+    private void MainWindow_Closed(object? sender, EventArgs e)
+    {
+        SystemEvents.UserPreferenceChanged -= SystemEvents_UserPreferenceChanged;
+    }
+
+    private void ApplySystemTheme()
+    {
+        var colors = SystemTheme.IsDarkMode()
+            ? new Dictionary<string, Color>
+            {
+                ["AppSurface"] = Color.FromRgb(18, 22, 27),
+                ["ChromeBackground"] = Color.FromRgb(27, 32, 38),
+                ["ChromeBorder"] = Color.FromRgb(55, 64, 74),
+                ["DocumentBackground"] = Color.FromRgb(20, 25, 30),
+                ["AppText"] = Color.FromRgb(226, 232, 240),
+                ["MutedText"] = Color.FromRgb(158, 170, 184),
+                ["AccentBrush"] = Color.FromRgb(91, 184, 155),
+                ["AccentSoftBrush"] = Color.FromRgb(31, 69, 59),
+                ["HoverBackground"] = Color.FromRgb(43, 51, 60),
+                ["PressedBackground"] = Color.FromRgb(53, 63, 73),
+                ["AccentBorder"] = Color.FromRgb(55, 112, 95),
+                ["CloseHoverBackground"] = Color.FromRgb(52, 61, 71),
+                ["ClosePressedBackground"] = Color.FromRgb(64, 75, 86)
+            }
+            : new Dictionary<string, Color>
+            {
+                ["AppSurface"] = Color.FromRgb(245, 247, 250),
+                ["ChromeBackground"] = Colors.White,
+                ["ChromeBorder"] = Color.FromRgb(221, 227, 234),
+                ["DocumentBackground"] = Color.FromRgb(250, 251, 252),
+                ["AppText"] = Color.FromRgb(31, 41, 51),
+                ["MutedText"] = Color.FromRgb(100, 113, 127),
+                ["AccentBrush"] = Color.FromRgb(47, 125, 103),
+                ["AccentSoftBrush"] = Color.FromRgb(225, 241, 236),
+                ["HoverBackground"] = Color.FromRgb(236, 241, 245),
+                ["PressedBackground"] = Color.FromRgb(221, 230, 236),
+                ["AccentBorder"] = Color.FromRgb(183, 217, 207),
+                ["CloseHoverBackground"] = Color.FromRgb(229, 235, 240),
+                ["ClosePressedBackground"] = Color.FromRgb(214, 224, 231)
+            };
+
+        foreach (var (key, color) in colors)
+        {
+            Resources[key] = new SolidColorBrush(color);
+        }
+
+        Background = (Brush)Resources["AppSurface"];
+        Foreground = (Brush)Resources["AppText"];
     }
 
     public void OpenBlankTab()

@@ -41,7 +41,7 @@ public sealed partial class MarkdownRenderer
               {{baseHref}}
               <style>
                 :root {
-                  color-scheme: light;
+                  color-scheme: light dark;
                   --page: #f5f7fa;
                   --surface: #ffffff;
                   --text: #1f2933;
@@ -53,6 +53,34 @@ public sealed partial class MarkdownRenderer
                   --link: #1f6f8b;
                   --code-bg: #f3f5f7;
                   --code-border: #dce5ec;
+                  --heading: #17212b;
+                  --body-text: #283440;
+                  --inset: #f7faf9;
+                  --table-heading: #eef5f2;
+                  --table-stripe: #f7f9fb;
+                  --page-edge: #e8edf2;
+                }
+
+                @media (prefers-color-scheme: dark) {
+                  :root {
+                    --page: #12161b;
+                    --surface: #14191e;
+                    --text: #e2e8f0;
+                    --muted: #9eabb8;
+                    --border: #37404a;
+                    --border-strong: #4a5662;
+                    --accent: #5bb89b;
+                    --accent-soft: #1f453b;
+                    --link: #76bdd5;
+                    --code-bg: #20262d;
+                    --code-border: #3a4550;
+                    --heading: #f0f4f8;
+                    --body-text: #d2dae3;
+                    --inset: #1b2423;
+                    --table-heading: #20312d;
+                    --table-stripe: #1a2026;
+                    --page-edge: #303943;
+                  }
                 }
 
                 html, body {
@@ -72,8 +100,8 @@ public sealed partial class MarkdownRenderer
                   margin: 0 auto;
                   padding: 44px 54px 72px;
                   background: var(--surface);
-                  border-left: 1px solid #e8edf2;
-                  border-right: 1px solid #e8edf2;
+                  border-left: 1px solid var(--page-edge);
+                  border-right: 1px solid var(--page-edge);
                 }
 
                 h1, h2, h3, h4, h5, h6 {
@@ -81,7 +109,7 @@ public sealed partial class MarkdownRenderer
                   line-height: 1.25;
                   font-weight: 600;
                   letter-spacing: 0;
-                  color: #17212b;
+                  color: var(--heading);
                 }
 
                 h1:first-child,
@@ -112,7 +140,7 @@ public sealed partial class MarkdownRenderer
                 }
 
                 p {
-                  color: #283440;
+                  color: var(--body-text);
                 }
 
                 a {
@@ -137,7 +165,7 @@ public sealed partial class MarkdownRenderer
                   margin-left: 0;
                   padding: 0.75em 1em;
                   color: var(--muted);
-                  background: #f7faf9;
+                  background: var(--inset);
                   border-left: 4px solid var(--accent);
                   border-radius: 0 6px 6px 0;
                 }
@@ -187,7 +215,7 @@ public sealed partial class MarkdownRenderer
                 }
 
                 th {
-                  background: #eef5f2;
+                  background: var(--table-heading);
                   font-weight: 600;
                 }
 
@@ -201,7 +229,7 @@ public sealed partial class MarkdownRenderer
                 }
 
                 tr:nth-child(2n) td {
-                  background: #f7f9fb;
+                  background: var(--table-stripe);
                 }
 
                 img {
@@ -232,7 +260,7 @@ public sealed partial class MarkdownRenderer
                   margin: 20px 0;
                   padding: 18px;
                   overflow: auto;
-                  background: #f7faf9;
+                  background: var(--inset);
                   border: 1px solid var(--border);
                   border-radius: 6px;
                 }
@@ -257,7 +285,8 @@ public sealed partial class MarkdownRenderer
               <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
               <script>
                 if (window.mermaid) {
-                  window.mermaid.initialize({ startOnLoad: true, securityLevel: "strict" });
+                  const darkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
+                  window.mermaid.initialize({ startOnLoad: true, securityLevel: "strict", theme: darkMode ? "dark" : "default" });
                 }
               </script>
             </body>
