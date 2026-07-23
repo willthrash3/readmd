@@ -8,7 +8,6 @@ using Microsoft.Win32;
 using Readmd.Documents;
 using Readmd.Infrastructure;
 using Readmd.Rendering;
-using System.ComponentModel;
 
 namespace Readmd;
 
