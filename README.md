@@ -54,6 +54,7 @@ src\Readmd\
 
 scripts\
   Generate-ReadmdIcon.ps1        Regenerates the `.ico` and preview PNG.
+  Publish-Readmd.ps1             Publishes and refreshes the `.md` registration.
   Register-ReadmdFileAssociation.ps1
   Unregister-ReadmdFileAssociation.ps1
 
@@ -98,18 +99,23 @@ $env:READMD_INSTANCE_NAME = "visual-test"
 
 Use a different `READMD_INSTANCE_NAME` when you intentionally want separate Readmd windows for automation or manual testing.
 
-## File Association
+## Publish and File Association
 
-Publish the app:
+Publish the app and refresh the `.md` Open With registration in one step:
 
 ```powershell
-dotnet publish src\Readmd -c Release -o .\artifacts\Readmd
+.\scripts\Publish-Readmd.ps1
 ```
 
-Register the published executable for `.md` Open With entries:
+This is the canonical local publishing command. It publishes the Release build
+to `artifacts\Readmd`, then registers that exact executable for `.md` files.
+Using one command prevents Explorer's Open With entry from launching a stale
+copy after application updates.
+
+To publish to another directory:
 
 ```powershell
-.\scripts\Register-ReadmdFileAssociation.ps1 -ExePath .\artifacts\Readmd\Readmd.exe
+.\scripts\Publish-Readmd.ps1 -OutputPath C:\Apps\Readmd
 ```
 
 The registration writes per-user keys under `HKCU`, so it does not require administrator access. Windows will show Readmd in Explorer's Open With flow and in Settings > Apps > Default apps. Windows controls the final default-app choice, so the script registers Readmd without forcing a UserChoice hash.
@@ -162,7 +168,13 @@ dotnet --list-sdks
 
 Readmd does not appear in Open With.
 
-Publish the app first, rerun the registration script with the published `Readmd.exe`, then reopen Explorer or check Windows Settings > Apps > Default apps.
+Run `.\scripts\Publish-Readmd.ps1`, then reopen Explorer or check Windows Settings > Apps > Default apps.
+
+Open With launches an older Readmd version.
+
+Close any running Readmd window and run `.\scripts\Publish-Readmd.ps1`. Readmd is
+single-instance, so an already-running older process can continue receiving
+files until it is closed.
 
 The visual test captures the wrong window.
 
